@@ -16,9 +16,11 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, form);
+      console.log(res.data);
       setMessage(res.data.message);
       if (res.data.success) {
         localStorage.setItem("token", res.data.token);
+        // localStorage.setItem("userId",res.data.userId);
         navigate("/weather");
       }
     } catch (err) {
