@@ -13,6 +13,7 @@ const Weather = () => {
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);   // 👈 toggle state
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
 
   const API_KEY = import.meta.env.VITE_API_KEY;
   const API_URL = `https://api.openweathermap.org/data/2.5/weather`;
@@ -24,9 +25,8 @@ const Weather = () => {
       const url = `${API_URL}?q=${city}&units=metric&appid=${API_KEY}`;
       const response = await axios.get(url);
       setWeather(response.data);
-
       // Save city to backend history
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/history`, { city, userId: 1 });
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/history`, { city, userId: userId });
     } catch (err) {
       if (err.response && err.response.status === 404) {
         setError('City not found, Please Try Again.');
@@ -42,7 +42,7 @@ const Weather = () => {
   const toggleHistory = async () => {
     if (!showHistory) {
       // Only fetch when showing
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/history`, { params: { userId: 1 } });
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/history`, { params: { userId: userId } });
       setHistory(res.data);
     }
     setShowHistory(!showHistory);   // 👈 toggle on/off
@@ -50,6 +50,7 @@ const Weather = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     navigate("/login");
   };
 
