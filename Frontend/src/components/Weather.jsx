@@ -26,7 +26,7 @@ const Weather = () => {
       setWeather(response.data);
 
       // Save city to backend history
-      await axios.post("http://localhost:4444/api/history", { city, userId: 1 });
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/history`, { city, userId: 1 });
     } catch (err) {
       if (err.response && err.response.status === 404) {
         setError('City not found, Please Try Again.');
@@ -42,7 +42,7 @@ const Weather = () => {
   const toggleHistory = async () => {
     if (!showHistory) {
       // Only fetch when showing
-      const res = await axios.get("http://localhost:4444/api/history", { params: { userId: 1 } });
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/history`, { params: { userId: 1 } });
       setHistory(res.data);
     }
     setShowHistory(!showHistory);   // 👈 toggle on/off
